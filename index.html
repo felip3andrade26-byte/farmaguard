@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="FarmaGuard — apoio à enfermagem na avaliação de riscos medicamentosos em idosos. Ferramenta educacional, não substitui avaliação profissional." />
+  <title>FarmaGuard — Apoio à Enfermagem na Segurança Medicamentosa</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="app-header">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="28" height="28" fill="none">
+            <path d="M16 3 5 8v8c0 6.6 4.7 11.7 11 13 6.3-1.3 11-6.4 11-13V8L16 3Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+            <path d="M12 16.5h8M16 12.5v8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="brand-name">FarmaGuard</span>
+      </div>
+      <p class="brand-tagline">Apoio à enfermagem na segurança medicamentosa de idosos</p>
+      <nav class="tabs" role="tablist" aria-label="Navegação principal">
+        <button class="tab active" role="tab" aria-selected="true" data-tab="analyze" id="tab-analyze">Analisar</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="history" id="tab-history">Histórico</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="settings" id="tab-settings">Configurações</button>
+      </nav>
+    </header>
+
+    <div class="safety-banner" role="note">
+      <strong>Ferramenta de apoio educacional.</strong> Não substitui avaliação médica ou farmacêutica. Não prescreve, não ajusta doses e não diagnostica. Em emergências, acione o serviço de saúde apropriado.
+    </div>
+
+    <main>
+      <!-- ABA ANALISAR -->
+      <section id="panel-analyze" class="panel active" role="tabpanel" aria-labelledby="tab-analyze">
+        <div class="card">
+          <h2 class="section-title">Nova análise</h2>
+          <div class="field">
+            <label for="patientName">Identificação fictícia do paciente</label>
+            <input type="text" id="patientName" placeholder="Ex.: Dona Maria S. (fictício)" autocomplete="off" maxlength="60" />
+            <p class="field-hint">Use apenas nomes fictícios ou iniciais. Não insira dados reais de pacientes.</p>
+          </div>
+          <div class="field">
+            <label for="medications">Lista de medicamentos <span class="required">*</span></label>
+            <textarea id="medications" rows="7" placeholder="Um medicamento por linha, com dose se disponível. Ex.:&#10;Losartana 50 mg 2x/dia&#10;Hidroclorotiazida 25 mg 1x/dia&#10;Ibuprofeno 400 mg se dor&#10;Sinvastatina 20 mg à noite"></textarea>
+            <p class="field-hint">Mínimo de 2 medicamentos. Separe cada um por linha.</p>
+          </div>
+          <div class="field">
+            <label>Condições clínicas relevantes (opcional)</label>
+            <div class="checkbox-grid">
+              <label class="checkbox-item"><input type="checkbox" name="condition" value="Idoso frágil (>80 anos)" /> Idoso frágil (&gt;80 anos)</label>
+              <label class="checkbox-item"><input type="checkbox" name="condition" value="Insuficiência renal" /> Insuficiência renal</label>
+              <label class="checkbox-item"><input type="checkbox" name="condition" value="Histórico de quedas" /> Histórico de quedas</label>
+              <label class="checkbox-item"><input type="checkbox" name="condition" value="Déficit cognitivo" /> Déficit cognitivo</label>
+            </div>
+          </div>
+          <div class="actions">
+            <button id="btnAnalyze" class="btn btn-primary">Analisar com IA</button>
+            <button id="btnClearForm" class="btn btn-ghost">Limpar formulário</button>
+          </div>
+          <div id="analyzeStatus" class="status" hidden></div>
+        </div>
+
+        <div id="resultsContainer" class="results" hidden>
+          <div class="results-header">
+            <h2 class="section-title">Resultado da análise</h2>
+            <span id="modeBadge" class="badge badge-demo">MODO DEMONSTRAÇÃO</span>
+          </div>
+          <p id="resultMeta" class="result-meta"></p>
+          <div id="alertsList" class="alerts-list"></div>
+          <p class="disclaimer-small">Esta análise é um apoio educacional gerado por IA/simulação. Não constitui diagnóstico nem prescrição. Comunique sempre o prescritor ou farmacêutico responsável antes de qualquer decisão clínica.</p>
+        </div>
+      </section>
+
+      <!-- ABA HISTÓRICO -->
+      <section id="panel-history" class="panel" role="tabpanel" aria-labelledby="tab-history" hidden>
+        <div class="card">
+          <h2 class="section-title">Histórico de análises</h2>
+          <p class="field-hint">Os dados abaixo estão armazenados apenas neste navegador (LocalStorage).</p>
+          <div class="filters">
+            <div class="field">
+              <label for="searchHistory">Buscar por identificação</label>
+              <input type="search" id="searchHistory" placeholder="Digite o nome fictício..." />
+            </div>
+            <div class="field">
+              <label for="filterLevel">Filtrar por nível de alerta</label>
+              <select id="filterLevel">
+                <option value="">Todos os níveis</option>
+                <option value="grave">Grave</option>
+                <option value="moderado">Moderado</option>
+                <option value="informativo">Informativo</option>
+              </select>
+            </div>
+          </div>
+          <div class="actions">
+            <button id="btnClearAll" class="btn btn-danger-ghost">Apagar todos os dados de demonstração</button>
+          </div>
+        </div>
+        <div id="historyList" class="history-list"></div>
+        <div id="historyEmpty" class="empty-state" hidden>
+          <p>Nenhuma análise encontrada.</p>
+          <p class="field-hint">Realize uma análise na aba “Analisar” para começar.</p>
+        </div>
+      </section>
+
+      <!-- ABA CONFIGURAÇÕES -->
+      <section id="panel-settings" class="panel" role="tabpanel" aria-labelledby="tab-settings" hidden>
+        <div class="card">
+          <h2 class="section-title">Configuração da IA (opcional)</h2>
+          <p class="field-hint">Se nenhuma chave for configurada, a aplicação opera em <strong>modo demonstração</strong> (resultados simulados, claramente sinalizados).</p>
+          <div class="field">
+            <label for="apiKey">Chave de API do OpenRouter</label>
+            <input type="password" id="apiKey" placeholder="sk-or-v1-..." autocomplete="off" />
+            <p class="field-hint">A chave é mantida apenas no <code>sessionStorage</code> desta aba e descartada ao fechá-la. Para produção, utilize um back-end intermediário.</p>
+          </div>
+          <div class="field">
+            <label for="modelSelect">Modelo</label>
+            <select id="modelSelect">
+              <option value="google/gemini-2.0-flash-exp:free">Gemini 2.0 Flash (gratuito)</option>
+              <option value="meta-llama/llama-3.3-70b-instruct:free">Llama 3.3 70B (gratuito)</option>
+              <option value="mistralai/mistral-7b-instruct:free">Mistral 7B (gratuito)</option>
+            </select>
+          </div>
+          <div class="actions">
+            <button id="btnSaveSettings" class="btn btn-primary">Salvar configuração</button>
+            <button id="btnClearSettings" class="btn btn-ghost">Remover chave</button>
+          </div>
+          <div id="settingsStatus" class="status" hidden></div>
+        </div>
+        <div class="card">
+          <h2 class="section-title">Privacidade e dados</h2>
+          <ul class="privacy-list">
+            <li>Nenhum dado é enviado a servidores próprios. As análises ficam no <strong>LocalStorage</strong> deste navegador.</li>
+            <li>Quando a API real está configurada, a lista de medicamentos é enviada ao provedor do modelo escolhido. Não envie dados identificáveis de pacientes reais.</li>
+            <li>Use apenas <strong>dados fictícios</strong> para demonstração.</li>
+            <li>Você pode apagar todos os registros a qualquer momento na aba “Histórico”.</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <p>FarmaGuard é um protótipo escolar de apoio à decisão em enfermagem. Não é um dispositivo médico. Não use em emergências.</p>
+    </footer>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
