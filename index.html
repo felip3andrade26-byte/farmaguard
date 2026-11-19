@@ -23,7 +23,6 @@
       <nav class="tabs" role="tablist" aria-label="Navegação principal">
         <button class="tab active" role="tab" aria-selected="true" data-tab="analyze" id="tab-analyze">Analisar</button>
         <button class="tab" role="tab" aria-selected="false" data-tab="history" id="tab-history">Histórico</button>
-        <button class="tab" role="tab" aria-selected="false" data-tab="care" id="tab-care">Cuidado</button>
         <button class="tab" role="tab" aria-selected="false" data-tab="settings" id="tab-settings">Configurações</button>
       </nav>
     </header>
@@ -41,11 +40,6 @@
             <label for="patientName">Identificação fictícia do paciente</label>
             <input type="text" id="patientName" placeholder="Ex.: Dona Maria S. (fictício)" autocomplete="off" maxlength="60" />
             <p class="field-hint">Use apenas nomes fictícios ou iniciais. Não insira dados reais de pacientes.</p>
-          </div>
-          <div class="field">
-            <label for="emergencyContact">Contato de emergência (opcional)</label>
-            <input type="text" id="emergencyContact" placeholder="Ex.: Filha Ana — (11) 99999-9999" autocomplete="off" maxlength="80" />
-            <p class="field-hint">Será exibido no Cartão de Emergência. Use dados fictícios para demonstração.</p>
           </div>
           <div class="field">
             <label for="medications">Lista de medicamentos <span class="required">*</span></label>
@@ -74,10 +68,6 @@
             <span id="modeBadge" class="badge badge-demo">MODO DEMONSTRAÇÃO</span>
           </div>
           <p id="resultMeta" class="result-meta"></p>
-          <div class="actions" style="margin: 4px 0 14px;">
-            <button id="btnReadAloud" class="btn btn-ghost btn-sm" type="button">🔊 Ouvir alertas em voz alta</button>
-            <button id="btnStopRead" class="btn btn-ghost btn-sm" type="button" hidden>⏹ Parar leitura</button>
-          </div>
           <div id="alertsList" class="alerts-list"></div>
           <p class="disclaimer-small">Esta análise é um apoio educacional gerado por IA/simulação. Não constitui diagnóstico nem prescrição. Comunique sempre o prescritor ou farmacêutico responsável antes de qualquer decisão clínica.</p>
         </div>
@@ -111,46 +101,6 @@
         <div id="historyEmpty" class="empty-state" hidden>
           <p>Nenhuma análise encontrada.</p>
           <p class="field-hint">Realize uma análise na aba “Analisar” para começar.</p>
-        </div>
-      </section>
-
-      <!-- ABA CUIDADO -->
-      <section id="panel-care" class="panel" role="tabpanel" aria-labelledby="tab-care" hidden>
-        <div class="card">
-          <h2 class="section-title">Cuidado diário e emergência</h2>
-          <p class="field-hint">Selecione uma análise para visualizar o cronograma diário e gerar o cartão de emergência.</p>
-          <div class="field">
-            <label for="careAnalysisSelect">Análise</label>
-            <select id="careAnalysisSelect"></select>
-          </div>
-        </div>
-
-        <div class="card" id="scheduleCard" hidden>
-          <div class="results-header">
-            <h2 class="section-title">Cronograma diário</h2>
-            <button class="btn btn-ghost btn-sm" id="btnPrintSchedule" type="button">Imprimir cronograma</button>
-          </div>
-          <p class="field-hint">Organização visual dos medicamentos por período do dia, com base na frequência descrita em cada linha.</p>
-          <div id="schedulePrintArea">
-            <div id="scheduleContent" class="schedule-grid"></div>
-            <p class="disclaimer-small">O cronograma é uma interpretação automática da descrição de cada medicamento. Confirme os horários com o prescritor antes de usar como referência para administração.</p>
-          </div>
-        </div>
-
-        <div class="card" id="emergencyCardSection" hidden>
-          <div class="results-header">
-            <h2 class="section-title">Cartão de emergência</h2>
-            <button class="btn btn-primary btn-sm" id="btnPrintCard" type="button">Imprimir cartão</button>
-          </div>
-          <p class="field-hint">Cartão do tamanho de um cartão de crédito para guardar na carteira. Inclui QR Code legível por qualquer celular em uma emergência.</p>
-          <div class="emergency-card-wrapper">
-            <div id="printableCard" class="printable-card"></div>
-          </div>
-        </div>
-
-        <div id="careEmpty" class="empty-state" hidden>
-          <p>Nenhuma análise disponível.</p>
-          <p class="field-hint">Realize uma análise na aba “Analisar” para gerar o cronograma e o cartão de emergência.</p>
         </div>
       </section>
 
@@ -194,9 +144,6 @@
       <p>FarmaGuard é um protótipo escolar de apoio à decisão em enfermagem. Não é um dispositivo médico. Não use em emergências.</p>
     </footer>
   </div>
-
-  <!-- Biblioteca de QR Code (CDN, MIT) — carregada antes do app.js -->
-  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
